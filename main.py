@@ -6,6 +6,9 @@ import pickle
 import streamlit_authenticator as stauth
 from pathlib import Path
 
+from data.table_1 import *
+
+
 # --- USER AUTH -------------------------
 
 names = ['admin']
@@ -28,140 +31,109 @@ if authentication_status == None:
 
 if authentication_status:
 
-    st.header("Додаткові методи дослідження в цифровій стоматології")
-    st.subheader("Хвилини та УОПи")
-    st.caption("Електронна аксіографія")
+    st.header("Додаткові методи дослідження в цифровій стоматології. Хвилини та УОПи")
+    st.subheader("Електронна аксіографія")
 
-    doctor_1 = 0
-    yop_doctor_1 = 0
-    ms_1 = 0
-    yop_ms_1 = 0
-    doctor_2 = 0
-    yop_doctor_2 = 0
-    ms_2 = 0
-    yop_ms_2 = 0
+    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
 
-    d = st.date_input("Дата проведення", datetime.date(2023, 10, 10))
-    st.write('Дата проведення:', d)
+    d1 = st.date_input("Дата проведення", datetime.date(2023, 10, 10))
+    st.write('Дата проведення:', d1)
 
-    some_data = pd.read_csv("df.csv")
-    st.write(some_data)
+    # some_data = pd.read_csv("df.csv")
+    # st.write(some_data)
 
-    options_1 = st.multiselect(
+    el_acsiography_options = st.multiselect(
         'Клінічні етапи',
-        ['Заповнення документації',
-        'Первинне обстеження і підготовка до дослідження',
-        'Адаптація параоклюзійної прикусної вилки',
-        'Підключення і калібрування аксіографа',
-        'Власне реєстраціярухів нижньої щелепи',
-        'Зняття пристроя і очищення зубіd пацієнта',
-        'Аналіз отриманих даних та підготовка заключення'],
-        [])
+        list(el_acsiography.keys()),
+        [], placeholder="Виберіть із списку")
+    
+    el_acsiography_doctor, el_acsiography_doctor_yop, el_acsiography_ms, el_acsiography_ms_yop = calculate_time(el_acsiography, el_acsiography_options)
 
-    if 'Заповнення документації' in options_1:
-        doctor_1 += 5
-        yop_doctor_1 += 0.08
-        ms_1 += 1.7
-        yop_ms_1 += 0.02 
+    st.write(f"Разом: Лікар - {el_acsiography_doctor} хв, \
+              {el_acsiography_doctor_yop} УОП. М/С – {el_acsiography_ms} хв, {el_acsiography_ms_yop} УОП.")
 
-    if 'Первинне обстеження і підготовка до дослідження' in options_1:
-        doctor_1 += 10
-        yop_doctor_1 += 0.16
-        ms_1 += 3.3
-        yop_ms_1 += 0.05
+# --- JVA --------------------------------------------------------
+    
+    st.subheader("Аналіз вібрацій СНЩС (JVA)")
+    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=2)
 
-    if 'Адаптація параоклюзійної прикусної вилки' in options_1:
-        doctor_1 += 30
-        yop_doctor_1 += 0.5
-        ms_1 += 10
-        yop_ms_1 += 0.16
+    d2 = st.date_input("Дата проведення", datetime.date(2023, 10, 11))
+    st.write('Дата проведення:', d2)
 
-    if 'Підключення і калібрування аксіографа' in options_1:
-        doctor_1 += 15
-        yop_doctor_1 += 0.25
-        ms_1 += 5
-        yop_ms_1 += 0.08
-
-    if 'Власне реєстраціярухів нижньої щелепи' in options_1:
-        doctor_1 += 30
-        yop_doctor_1 += 0.5
-        ms_1 += 10
-        yop_ms_1 += 0.16
-
-    if 'Зняття пристроя і очищення зубіd пацієнта' in options_1:
-        doctor_1 += 15
-        yop_doctor_1 += 0.25
-        ms_1 += 5
-        yop_ms_1 += 0.08
-
-    if 'Аналіз отриманих даних та підготовка заключення' in options_1:
-        doctor_1 += 60
-        yop_doctor_1 += 1
-        ms_1 += 20
-        yop_ms_1 += 0.33
-
-    yop_doctor_1 = round(yop_doctor_1, 2)
-    yop_ms_1 = round(yop_ms_1, 2)
-
-    st.write(f"Разом: Лікар - {doctor_1} хв, {yop_doctor_1} УОП. М/С – {ms_1} хв {yop_ms_1} УОП.")
-
-    st.caption("Аналіз вібрацій СНЩС (JVA)")
+    
 
 
-    date_2 = st.date_input("Дата проведення", datetime.date(2023, 10, 11))
-    st.write('Дата проведення:', date_2)
-
-    options_2 = st.multiselect(
+    jva_options = st.multiselect(
         'Клінічні етапи',
-        ['Заповнення документації',
-        'Первинне обстеження і підготовка до дослідження',
-        'Оцінка ступеня відкривання рота та рухів нижньої щелепи',
-        'Запис даних прибором',
-        'Аналіз отриманих даних і підготовка заключення'],
-        [])
+        list(jva.keys()),
+        [], placeholder="Виберіть із списку")
+    
+    jva_doctor, jva_doctor_yop, jva_ms, jva_ms_yop = calculate_time(jva, jva_options)
 
-    if 'Заповнення документації' in options_2:
-        doctor_2 += 15
-        yop_doctor_2 += 0.25
-        ms_2 += 5
-        yop_ms_2 += 0.08 
+    st.write(f"Разом: Лікар - {jva_doctor} хв, {jva_doctor_yop} УОП. М/С – {jva_ms} хв {jva_ms_yop} УОП.")
 
-    if 'Первинне обстеження і підготовка до дослідження' in options_2:
-        doctor_2 += 15
-        yop_doctor_2 += 0.25
-        ms_2 += 5
-        yop_ms_2 += 0.08
+    # --- MIOGRAPHY ---------------------------------------------
 
-    if 'Оцінка ступеня відкривання рота та рухів нижньої щелепи' in options_2:
-        doctor_2 += 10
-        yop_doctor_2 += 0.16
-        ms_2 += 3.3
-        yop_ms_2 += 0.05
+    st.subheader("Електоміографія")
 
-    if 'Запис даних прибором' in options_2:
-        doctor_2 += 15
-        yop_doctor_2 += 0.25
-        ms_2 += 5
-        yop_ms_2 += 0.08
+    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=3)
 
-    if 'Аналіз отриманих даних і підготовка заключення' in options_2:
-        doctor_2 += 30
-        yop_doctor_2 += 0.5
-        ms_2 += 10
-        yop_ms_2 += 0.16
+    d3 = st.date_input("Дата проведення", datetime.date(2023, 10, 13))
+    st.write('Дата проведення:', d3)
 
-    yop_doctor_2 = round(yop_doctor_2, 2)
-    yop_ms_2 = round(yop_ms_2, 2)
 
-    st.write(f"Разом: Лікар - {doctor_2} хв, {yop_doctor_2} УОП. М/С – {ms_2} хв {yop_ms_2} УОП.")
+    el_miography_options = st.multiselect(
+        'Клінічні етапи',
+        list(el_miography.keys()),
+        [], placeholder="Виберіть із списку")
+    
+    el_miography_doctor, el_miography_doctor_yop, el_miography_ms, el_miography_ms_yop = calculate_time(el_miography, el_miography_options)
 
-    df = pd.DataFrame({'numbers': [1, 2, 3], 'colors': ['red', 'white', 'blue']})
+    st.write(f"Разом: Лікар - {el_miography_doctor} хв, {el_miography_doctor_yop} УОП. М/С – {el_miography_ms} хв {el_miography_ms_yop} УОП.")
 
-    st.write(df)
-    if st.button('save dataframe'):
-        data = [4, "BLACK"]
-        some_data.loc[len(some_data)] = data
-        open('df.csv', 'w').write(some_data.to_csv(index=False))
+    # --- T-SCAN ---------------------------------------------
+
+    st.subheader("T-SCAN")
+
+    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=4)
+
+
+    d4 = st.date_input("Дата проведення", datetime.date(2023, 10, 14))
+    st.write('Дата проведення:', d4)
+
+    t_scan_options = st.multiselect(
+        'Клінічні етапи',
+        list(t_scan.keys()),
+        [], placeholder="Виберіть із списку")
+    
+    t_scan_doctor, t_scan_doctor_yop, t_scan_ms, t_scan_ms_yop = calculate_time(t_scan, t_scan_options)
+
+    st.write(f"Разом: Лікар - {t_scan_doctor} хв, {t_scan_doctor_yop} УОП. М/С – {t_scan_ms} хв {t_scan_ms_yop} УОП.")
+
+    # --- Цефалометричний аналіз,сегментація---------------------------------------------
+
+    st.subheader("Цефалометричний аналіз, сегментація")
+    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=5)
+
+    d5 = st.date_input("Дата проведення", datetime.date(2023, 10, 15))
+    st.write('Дата проведення:', d5)
+
+    segmentation_options = st.multiselect(
+        'Клінічні етапи',
+        list(segmentation.keys()),
+        [], placeholder="Виберіть із списку")
+    
+    segmentation_doctor, segmentation_doctor_yop, segmentation_ms, segmentation_ms_yop = calculate_time(segmentation, segmentation_options)
+
+    st.write(f"Разом: Лікар - {segmentation_doctor} хв, {segmentation_doctor_yop} УОП. М/С – {segmentation_ms} хв {segmentation_ms_yop} УОП.")
+
+    # df = pd.DataFrame({'numbers': [1, 2, 3], 'colors': ['red', 'white', 'blue']})
+
+    # st.write(df)
+    # if st.button('save dataframe'):
+    #     data = [4, "BLACK"]
+    #     some_data.loc[len(some_data)] = data
+    #     open('df.csv', 'w').write(some_data.to_csv(index=False))
     # source = pd.DataFrame({
     #         'Price ($)': [10, 15, 20],
     #         'Month': ['January', 'February', 'March']
@@ -179,3 +151,4 @@ if authentication_status:
 
     authenticator.logout("Logout", "sidebar")
     st.sidebar.title(f"Welcome {name}")
+
