@@ -6,7 +6,7 @@ import pickle
 import streamlit_authenticator as stauth
 from pathlib import Path
 
-from pages.data.table_2 import *
+from pages.data.table_7 import *
 
 # st.set_page_config(page_title="Plotting Demo", page_icon="📈")
 
@@ -29,20 +29,19 @@ if authentication_status == None:
     st.warning("Please enter your username and password")
 
 if authentication_status:
-    
-    st.markdown("# Етапи виготовлення вінірів з пресованої кераміки цифровим та аналоговим методом")
+    st.markdown("# Етапи виготовлення цирконієвих коронок цифровим та аналоговим методом")
 
     st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
 
-    d1 = st.date_input("Дата проведення", datetime.date(2023, 10, 10))
+    d1 = st.date_input("Дата проведення", datetime.date(2023, 10, 12))
     st.write('Дата проведення:', d1)
 
     constr_type = st.selectbox("Тип кострукції", ['Цифровий протокол', 'Аналоговий протокол'])
 
-    quantity = st.number_input("Прес-керамічний вінір", min_value=1, placeholder="Введіть кількість", value=1)
+    quantity = st.number_input("Цирконієвa коронка", min_value=1, placeholder="Введіть кількість", value=1)
     
     st.write("Клініко-лабораторні етапи")
-    
+
     if constr_type == "Цифровий протокол":
         
         selected_values = []
@@ -66,7 +65,7 @@ if authentication_status:
             tech += element[1][0]
             tech_yop += element[1][1]
             ms += element[2][0]
-            ms_yop += element[1][1]
+            ms_yop += element[2][1]
 
         doctor *= quantity
         doctor_yop *= quantity
@@ -102,7 +101,7 @@ if authentication_status:
             tech += element[1][0]
             tech_yop += element[1][1]
             ms += element[2][0]
-            ms_yop += element[2][1]
+            ms_yop += element[1][1]
 
         doctor *= quantity
         doctor_yop *= quantity
@@ -116,6 +115,7 @@ if authentication_status:
         ms_yop = round(ms_yop, 2)
 
         st.write(f'Загалом: лікар {doctor}хв {doctor_yop} УОП. Технік: {tech}хв {tech_yop} УОП. M/C: {ms}хв {ms_yop} УОП')
+
 
 
     authenticator.logout("Logout", "sidebar")
