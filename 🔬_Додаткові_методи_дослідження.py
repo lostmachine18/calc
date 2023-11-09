@@ -34,7 +34,7 @@ if authentication_status:
     st.header("Додаткові методи дослідження в цифровій стоматології. Хвилини та УОПи")
     st.subheader("Електронна аксіографія")
 
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
+    doctor_name = st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
 
     d1 = st.date_input("Дата проведення", datetime.date(2023, 10, 10))
     st.write('Дата проведення:', d1)
@@ -51,11 +51,31 @@ if authentication_status:
 
     st.write(f"Разом: Лікар - {el_acsiography_doctor} хв, \
               {el_acsiography_doctor_yop} УОП. М/С – {el_acsiography_ms} хв, {el_acsiography_ms_yop} УОП.")
+    st.write(el_acsiography_options)
+    if st.button('Зберегти інформацію', key=2):
+        df = pd.read_csv("calc_axiography_methods_1.csv")
+        if doctor_name == "":
+            st.warning("Будь ласка, введіть лікаря!")
+        elif len(el_acsiography_options) == 0:
+            st.warning("Будь ласка, виберіть клінічні етапи!")
+        else:
+          data = [doctor_name,
+                  d1,
+                  el_acsiography_options,
+                  el_acsiography_doctor,
+                  el_acsiography_doctor_yop,
+                  el_acsiography_ms,
+                  el_acsiography_ms_yop
+                  ]
+          df.loc[len(df)] = data
+          df.to_csv('calc_axiography_methods_1.csv', index=False)
+          st.write(df)
+          st.success("Дані були збережні.")
 
 # --- JVA --------------------------------------------------------
     
     st.subheader("Аналіз вібрацій СНЩС (JVA)")
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=2)
+    #st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=2)
 
     d2 = st.date_input("Дата проведення", datetime.date(2023, 10, 11))
     st.write('Дата проведення:', d2)
@@ -71,12 +91,32 @@ if authentication_status:
     jva_doctor, jva_doctor_yop, jva_ms, jva_ms_yop = calculate_time(jva, jva_options)
 
     st.write(f"Разом: Лікар - {jva_doctor} хв, {jva_doctor_yop} УОП. М/С – {jva_ms} хв {jva_ms_yop} УОП.")
+    
+    if st.button('Зберегти інформацію', key=3):
+        df = pd.read_csv("calc_jva_methods_1.csv")
+        if doctor_name == "":
+            st.warning("Будь ласка, введіть лікаря!")
+        elif len(jva_options) == 0:
+            st.warning("Будь ласка, виберіть клінічні етапи!")
+        else:
+          data = [doctor_name,
+                  d2,
+                  jva_options,
+                  jva_doctor,
+                  jva_doctor_yop,
+                  jva_ms,
+                  jva_ms_yop
+                  ]
+          df.loc[len(df)] = data
+          df.to_csv('calc_jva_methods_1.csv', index=False)
+          st.write(df)
+          st.success("Дані були збережні.")
 
     # --- MIOGRAPHY ---------------------------------------------
 
     st.subheader("Електоміографія")
 
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=3)
+    #st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=3)
 
     d3 = st.date_input("Дата проведення", datetime.date(2023, 10, 13))
     st.write('Дата проведення:', d3)
@@ -90,12 +130,31 @@ if authentication_status:
     el_miography_doctor, el_miography_doctor_yop, el_miography_ms, el_miography_ms_yop = calculate_time(el_miography, el_miography_options)
 
     st.write(f"Разом: Лікар - {el_miography_doctor} хв, {el_miography_doctor_yop} УОП. М/С – {el_miography_ms} хв {el_miography_ms_yop} УОП.")
+    if st.button('Зберегти інформацію', key=4):
+        df = pd.read_csv("calc_miography_methods_1.csv")
+        if doctor_name == "":
+            st.warning("Будь ласка, введіть лікаря!")
+        elif len(el_miography_options) == 0:
+            st.warning("Будь ласка, виберіть клінічні етапи!")
+        else:
+          data = [doctor_name,
+                  d3,
+                  el_miography_options,
+                  el_miography_doctor,
+                  el_miography_doctor_yop,
+                  el_miography_ms,
+                  el_miography_ms_yop
+                  ]
+          df.loc[len(df)] = data
+          df.to_csv('calc_miography_methods_1.csv', index=False)
+          st.write(df)
+          st.success("Дані були збережні.")
 
     # --- T-SCAN ---------------------------------------------
 
     st.subheader("T-SCAN")
 
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=4)
+    #st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=4)
 
 
     d4 = st.date_input("Дата проведення", datetime.date(2023, 10, 14))
@@ -109,11 +168,30 @@ if authentication_status:
     t_scan_doctor, t_scan_doctor_yop, t_scan_ms, t_scan_ms_yop = calculate_time(t_scan, t_scan_options)
 
     st.write(f"Разом: Лікар - {t_scan_doctor} хв, {t_scan_doctor_yop} УОП. М/С – {t_scan_ms} хв {t_scan_ms_yop} УОП.")
+    if st.button('Зберегти інформацію', key=5):
+        df = pd.read_csv("calc_tscan_methods_1.csv")
+        if doctor_name == "":
+            st.warning("Будь ласка, введіть лікаря!")
+        elif len(t_scan_options) == 0:
+            st.warning("Будь ласка, виберіть клінічні етапи!")
+        else:
+          data = [doctor_name,
+                  d4,
+                  t_scan_options,
+                  t_scan_doctor,
+                  t_scan_doctor_yop,
+                  t_scan_ms,
+                  t_scan_ms_yop
+                  ]
+          df.loc[len(df)] = data
+          df.to_csv('calc_tscan_methods_1.csv', index=False)
+          st.write(df)
+          st.success("Дані були збережні.")
 
     # --- Цефалометричний аналіз,сегментація---------------------------------------------
 
     st.subheader("Цефалометричний аналіз, сегментація")
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=5)
+    #st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=5)
 
     d5 = st.date_input("Дата проведення", datetime.date(2023, 10, 15))
     st.write('Дата проведення:', d5)
@@ -126,11 +204,30 @@ if authentication_status:
     segmentation_doctor, segmentation_doctor_yop, segmentation_ms, segmentation_ms_yop = calculate_time(segmentation, segmentation_options)
 
     st.write(f"Разом: Лікар - {segmentation_doctor} хв, {segmentation_doctor_yop} УОП. М/С – {segmentation_ms} хв {segmentation_ms_yop} УОП.")
+    if st.button('Зберегти інформацію', key=6):
+        df = pd.read_csv("calc_segmentation_methods_1.csv")
+        if doctor_name == "":
+            st.warning("Будь ласка, введіть лікаря!")
+        elif len(segmentation_options) == 0:
+            st.warning("Будь ласка, виберіть клінічні етапи!")
+        else:
+          data = [doctor_name,
+                  d5,
+                  segmentation_options,
+                  segmentation_doctor,
+                  segmentation_doctor_yop,
+                  segmentation_ms,
+                  segmentation_ms_yop
+                  ]
+          df.loc[len(df)] = data
+          df.to_csv('calc_segmentation_methods_1.csv', index=False)
+          st.write(df)
+          st.success("Дані були збережні.")
 
     # df = pd.DataFrame({'numbers': [1, 2, 3], 'colors': ['red', 'white', 'blue']})
 
     # st.write(df)
-    # if st.button('save dataframe'):
+    
     #     data = [4, "BLACK"]
     #     some_data.loc[len(some_data)] = data
     #     open('df.csv', 'w').write(some_data.to_csv(index=False))
