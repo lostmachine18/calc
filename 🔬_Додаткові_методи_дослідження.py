@@ -8,6 +8,14 @@ from pathlib import Path
 
 from data.table_1 import *
 
+st.sidebar.markdown("""
+    <style>
+    [data-testid='stSidebarNav'] > ul {
+        min-height: 50vh;
+    } 
+    </style>
+    """, unsafe_allow_html=True)
+
 
 # --- USER AUTH -------------------------
 
@@ -51,7 +59,7 @@ if authentication_status:
 
     st.write(f"Разом: Лікар - {el_acsiography_doctor} хв, \
               {el_acsiography_doctor_yop} УОП. М/С – {el_acsiography_ms} хв, {el_acsiography_ms_yop} УОП.")
-    st.write(el_acsiography_options)
+    
     if st.button('Зберегти інформацію', key=2):
         df = pd.read_csv("calc_axiography_methods_1.csv")
         if doctor_name == "":
@@ -69,7 +77,7 @@ if authentication_status:
                   ]
           df.loc[len(df)] = data
           df.to_csv('calc_axiography_methods_1.csv', index=False)
-          st.write(df)
+          
           st.success("Дані були збережні.")
 
 # --- JVA --------------------------------------------------------
@@ -109,7 +117,6 @@ if authentication_status:
                   ]
           df.loc[len(df)] = data
           df.to_csv('calc_jva_methods_1.csv', index=False)
-          st.write(df)
           st.success("Дані були збережні.")
 
     # --- MIOGRAPHY ---------------------------------------------
@@ -147,7 +154,6 @@ if authentication_status:
                   ]
           df.loc[len(df)] = data
           df.to_csv('calc_miography_methods_1.csv', index=False)
-          st.write(df)
           st.success("Дані були збережні.")
 
     # --- T-SCAN ---------------------------------------------
@@ -185,7 +191,6 @@ if authentication_status:
                   ]
           df.loc[len(df)] = data
           df.to_csv('calc_tscan_methods_1.csv', index=False)
-          st.write(df)
           st.success("Дані були збережні.")
 
     # --- Цефалометричний аналіз,сегментація---------------------------------------------
@@ -221,7 +226,6 @@ if authentication_status:
                   ]
           df.loc[len(df)] = data
           df.to_csv('calc_segmentation_methods_1.csv', index=False)
-          st.write(df)
           st.success("Дані були збережні.")
 
     # df = pd.DataFrame({'numbers': [1, 2, 3], 'colors': ['red', 'white', 'blue']})
@@ -246,6 +250,7 @@ if authentication_status:
     # data_1 = pd.DataFrame({'Лікар': [doctor_1]})
     # st.bar_chart(data_1, width=50)
 
-    authenticator.logout("Logout", "sidebar")
     st.sidebar.title(f"Welcome {name}")
+    authenticator.logout("Logout", "sidebar")
+
 

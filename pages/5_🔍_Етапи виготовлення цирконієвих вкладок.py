@@ -8,6 +8,15 @@ from pathlib import Path
 
 from pages.data.table_6 import *
 
+st.sidebar.markdown("""
+    <style>
+    [data-testid='stSidebarNav'] > ul {
+        min-height: 50vh;
+    } 
+    </style>
+    """, unsafe_allow_html=True)
+
+
 # st.set_page_config(page_title="Plotting Demo", page_icon="📈")
 
 names = ['admin']
@@ -31,7 +40,7 @@ if authentication_status == None:
 if authentication_status:
     st.markdown("# Етапи виготовлення цирконієвих вкладок цифровим та аналоговим методом")
 
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
+    doctor_name = st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
 
     d1 = st.date_input("Дата проведення", datetime.date(2023, 10, 12))
     st.write('Дата проведення:', d1)
@@ -44,79 +53,108 @@ if authentication_status:
 
     if constr_type == "Цифровий протокол":
         
-        selected_values = []
-        for label, value in checkbox_values_digital.items():
-            if label == "Зняття відбитку з силіконової маси":
-                st.write("Або за допомогою лабораторного сканеру:")
-            is_selected = st.checkbox(label)
-            if is_selected:
-                selected_values.append(value)
+      selected_values = []
+      selected_labels = []
+      for label, value in checkbox_values_digital.items():
+          if label == "Зняття відбитку з силіконової маси":
+              st.write("Або за допомогою лабораторного сканеру:")
+          is_selected = st.checkbox(label)
+          if is_selected:
+              selected_values.append(value)
+              selected_labels.append(label)
 
-        doctor = 0
-        doctor_yop = 0
-        tech = 0
-        tech_yop = 0
-        ms = 0
-        ms_yop = 0
+      doctor = 0
+      doctor_yop = 0
+      tech = 0
+      tech_yop = 0
+      ms = 0
+      ms_yop = 0
 
-        for element in selected_values:
-            doctor += element[0][0]
-            doctor_yop += element[0][1]
-            tech += element[1][0]
-            tech_yop += element[1][1]
-            ms += element[2][0]
-            ms_yop += element[2][1]
+      for element in selected_values:
+          doctor += element[0][0]
+          doctor_yop += element[0][1]
+          tech += element[1][0]
+          tech_yop += element[1][1]
+          ms += element[2][0]
+          ms_yop += element[2][1]
 
-        doctor *= quantity
-        doctor_yop *= quantity
-        tech *= quantity
-        tech_yop *= quantity
-        ms *= quantity
-        ms_yop *= quantity
+      doctor *= quantity
+      doctor_yop *= quantity
+      tech *= quantity
+      tech_yop *= quantity
+      ms *= quantity
+      ms_yop *= quantity
 
-        doctor_yop = round(doctor_yop, 2)
-        tech_yop = round(tech_yop, 2)
-        ms_yop = round(ms_yop, 2)
+      doctor_yop = round(doctor_yop, 2)
+      tech_yop = round(tech_yop, 2)
+      ms_yop = round(ms_yop, 2)
 
-        st.write(f'Загалом: лікар {doctor}хв {doctor_yop} УОП. Технік: {tech}хв {tech_yop} УОП. M/C: {ms}хв {ms_yop} УОП')
+      st.write(f'Загалом: лікар {doctor}хв {doctor_yop} УОП. Технік: {tech}хв {tech_yop} УОП. M/C: {ms}хв {ms_yop} УОП')
     else:
         
-        selected_values = []
-        for label, value in checkbox_values_analog.items():
-            
-            is_selected = st.checkbox(label)
-            if is_selected:
-                selected_values.append(value)
+      selected_values = []
+      selected_labels = []
+      for label, value in checkbox_values_analog.items():
+          
+          is_selected = st.checkbox(label)
+          if is_selected:
+              selected_values.append(value)
+              selected_labels.append(label)
 
-        doctor = 0
-        doctor_yop = 0
-        tech = 0
-        tech_yop = 0
-        ms = 0
-        ms_yop = 0
+      doctor = 0
+      doctor_yop = 0
+      tech = 0
+      tech_yop = 0
+      ms = 0
+      ms_yop = 0
 
-        for element in selected_values:
-            doctor += element[0][0]
-            doctor_yop += element[0][1]
-            tech += element[1][0]
-            tech_yop += element[1][1]
-            ms += element[2][0]
-            ms_yop += element[1][1]
+      for element in selected_values:
+          doctor += element[0][0]
+          doctor_yop += element[0][1]
+          tech += element[1][0]
+          tech_yop += element[1][1]
+          ms += element[2][0]
+          ms_yop += element[1][1]
 
-        doctor *= quantity
-        doctor_yop *= quantity
-        tech *= quantity
-        tech_yop *= quantity
-        ms *= quantity
-        ms_yop *= quantity
+      doctor *= quantity
+      doctor_yop *= quantity
+      tech *= quantity
+      tech_yop *= quantity
+      ms *= quantity
+      ms_yop *= quantity
 
-        doctor_yop = round(doctor_yop, 2)
-        tech_yop = round(tech_yop, 2)
-        ms_yop = round(ms_yop, 2)
+      doctor_yop = round(doctor_yop, 2)
+      tech_yop = round(tech_yop, 2)
+      ms_yop = round(ms_yop, 2)
 
-        st.write(f'Загалом: лікар {doctor}хв {doctor_yop} УОП. Технік: {tech}хв {tech_yop} УОП. M/C: {ms}хв {ms_yop} УОП')
+      st.write(f'Загалом: лікар {doctor}хв {doctor_yop} УОП. Технік: {tech}хв {tech_yop} УОП. M/C: {ms}хв {ms_yop} УОП')
+
+    if st.button('Зберегти інформацію', key=11):
+      df = pd.read_csv("5.csv")
+      if doctor_name == "":
+          st.warning("Будь ласка, введіть лікаря!")
+      
+      elif len(selected_labels) == 0:
+        st.warning("Будь ласка, виберіть клінічні етапи")
+      else:
+        data = [doctor_name,
+                d1,
+                constr_type,
+                quantity,
+                selected_labels,
+                doctor,
+                doctor_yop,
+                tech,
+                tech_yop,
+                ms,
+                ms_yop
+                ]
+        df.loc[len(df)] = data
+        df.to_csv('5.csv', index=False)
+        st.write(df)
+        st.success("Дані були збережні.")
 
 
 
-    authenticator.logout("Logout", "sidebar")
     st.sidebar.title(f"Welcome {name}")
+    authenticator.logout("Logout", "sidebar")

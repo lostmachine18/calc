@@ -8,6 +8,15 @@ from pathlib import Path
 
 from pages.data.table_7 import *
 
+st.sidebar.markdown("""
+    <style>
+    [data-testid='stSidebarNav'] > ul {
+        min-height: 50vh;
+    } 
+    </style>
+    """, unsafe_allow_html=True)
+
+
 # st.set_page_config(page_title="Plotting Demo", page_icon="📈")
 
 names = ['admin']
@@ -31,7 +40,7 @@ if authentication_status == None:
 if authentication_status:
     st.markdown("# Етапи виготовлення цирконієвих коронок цифровим та аналоговим методом")
 
-    st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
+    doctor_name = st.text_input("ПІБ доктора", placeholder="Введіть ПІБ доктора", key=1)
 
     d1 = st.date_input("Дата проведення", datetime.date(2023, 10, 12))
     st.write('Дата проведення:', d1)
@@ -45,12 +54,14 @@ if authentication_status:
     if constr_type == "Цифровий протокол":
         
         selected_values = []
+        selected_labels = []
         for label, value in checkbox_values_digital.items():
             if label == "Зняття відбитку з силіконової маси":
                 st.write("Або за допомогою лабораторного сканеру:")
             is_selected = st.checkbox(label)
             if is_selected:
                 selected_values.append(value)
+                selected_labels.append(label)
 
         doctor = 0
         doctor_yop = 0
@@ -82,11 +93,13 @@ if authentication_status:
     else:
         
         selected_values = []
+        selected_labels = []
         for label, value in checkbox_values_analog.items():
             
             is_selected = st.checkbox(label)
             if is_selected:
                 selected_values.append(value)
+                selected_labels.append(label)
 
         doctor = 0
         doctor_yop = 0
@@ -115,8 +128,31 @@ if authentication_status:
         ms_yop = round(ms_yop, 2)
 
         st.write(f'Загалом: лікар {doctor}хв {doctor_yop} УОП. Технік: {tech}хв {tech_yop} УОП. M/C: {ms}хв {ms_yop} УОП')
+    if st.button('Зберегти інформацію', key=12):
+      df = pd.read_csv("6.csv")
+      if doctor_name == "":
+          st.warning("Будь ласка, введіть лікаря!")
+      
+      elif len(selected_labels) == 0:
+        st.warning("Будь ласка, виберіть клінічні етапи")
+      else:
+        data = [doctor_name,
+                d1,
+                constr_type,
+                quantity,
+                selected_labels,
+                doctor,
+                doctor_yop,
+                tech,
+                tech_yop,
+                ms,
+                ms_yop
+                ]
+        df.loc[len(df)] = data
+        df.to_csv('6.csv', index=False)
+        st.write(df)
+        st.success("Дані були збережні.")
 
 
-
-    authenticator.logout("Logout", "sidebar")
     st.sidebar.title(f"Welcome {name}")
+    authenticator.logout("Logout", "sidebar")
