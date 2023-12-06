@@ -73,7 +73,7 @@ if authentication_status:
       st.subheader("Електронна аксіографія")
 
       st.write(df1)
-      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП","Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП",   "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
       st.write(data1)
 
       fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
@@ -250,6 +250,271 @@ if authentication_status:
       st.plotly_chart(fig2)
   
   
+  if selected_db == "Етапи виготовлення вінірів з пресованої кераміки":
+      
+      df1 = pd.read_csv("1.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
+
+  if selected_db == "Етапи виготовлення вкладок з пресованої кераміки":
+      
+      df1 = pd.read_csv("2.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
+
+  if selected_db == "Етапи виготовлення коронок з пресованої кераміки":
+      
+      df1 = pd.read_csv("3.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
+  
+  if selected_db == "Етапи виготовлення цирконієвих вінірів":
+      
+      df1 = pd.read_csv("4.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
+
+  if selected_db == "Етапи виготовлення цирконієвих вкладок":
+      
+      df1 = pd.read_csv("5.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
+
+  if selected_db == "Етапи виготовлення цирконієвих коронок":
+      
+      df1 = pd.read_csv("6.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
+
+  if selected_db == "Етапи виготовлення цирконієвих мостоподібних протезів":
+      
+      df1 = pd.read_csv("7.csv")
+      df1.columns = ["Доктор","Дата", "Тип кострукції", "Кількість", "Етапи","Доктор, хв","Доктор, УОП", "Технік, хв", "Технік, УОП", "Молодший персонал, хв","Молодший персонал, УОП"]
+      st.write(df1)
+
+      data1 = df1.groupby("Доктор")[["Доктор, хв", "Доктор, УОП", "Технік, хв", "Технік, УОП",  "Молодший персонал, хв","Молодший персонал, УОП"]].sum().reset_index()
+      st.write(data1)
+
+      fig1 = px.bar(data1, x='Доктор', y='Доктор, хв', title='Доктор, загальний час, хв')
+      fig1.update_layout(yaxis_title='Доктор, хв')
+      st.plotly_chart(fig1)
+      
+      doctors = df1['Доктор'].unique()
+
+      selected_doctor = st.selectbox("Виберіть лікаря", doctors)
+      data2 = df1[df1["Доктор"] == selected_doctor]
+      st.write(data2)
+
+      d1 = st.date_input("Виберіть місяць", date.today())
+      selected_year = d1.year
+      selected_month = d1.month
+      data2["Дата"] = pd.to_datetime(data2["Дата"])
+      date_filter = (data2['Дата'].dt.year == selected_year) & (data2['Дата'].dt.month == selected_month)
+      data3 = data2[date_filter]
+      st.write(data3)
+      
+      
+      
+      fig2 = px.bar(data3, x='Дата', y='Доктор, хв', title=f'Доктор {selected_doctor}, загальний час, хв')
+      fig2.update_layout(yaxis_title='Доктор, хв')
+      #fig2.update_layout(xaxis=dict(tickvals=[]))
+      data3_sorted = data3.sort_values(by = "Дата")
+      data3_sorted['cum'] = data3_sorted['Доктор, хв'].cumsum()
+
+      fig2.add_trace(go.Scatter(x=data3_sorted['Дата'], y=data3_sorted['cum'], line=dict(color='orange'), mode='lines', name='Разом, хв'))
+      st.plotly_chart(fig2)
   
   st.sidebar.title(f"Welcome {name}")
   authenticator.logout("Logout", "sidebar")

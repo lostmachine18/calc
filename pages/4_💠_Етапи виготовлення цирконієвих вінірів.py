@@ -151,7 +151,7 @@ if authentication_status:
                 ]
         df.loc[len(df)] = data
         df.to_csv('4.csv', index=False)
-        st.write(df)
+        # st.write(df)
         st.success("Дані були збережні.")
 
 
