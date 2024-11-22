@@ -3,9 +3,9 @@ from pathlib import Path
 
 import streamlit_authenticator as stauth
 
-names = ['']
-usernames = ['']
-passwords = ['']
+names = ['guest']
+usernames = ['guest']
+passwords = ['guest']
 
 hashed_passwords = stauth.Hasher(passwords).generate()
 

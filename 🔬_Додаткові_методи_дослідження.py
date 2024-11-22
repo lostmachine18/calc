@@ -19,8 +19,8 @@ st.sidebar.markdown("""
 
 # --- USER AUTH -------------------------
 
-names = ['admin']
-usernames = ['admin']
+names = ['guest']
+usernames = ['guest']
 
 file_path = Path(__file__).parent / "hashed_pw.pkl"
 with file_path.open("rb") as file:
